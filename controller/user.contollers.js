@@ -13,25 +13,25 @@ export const userRegister = async (req, res) => {
         user = await User.create({
             name: name,
             email: email,
-            password: hashedPassword(password),
-            role:role
+            password: password,
+            role: role
         })
-        sendCookie(user,res,"User registered successfully!!",201)
+        sendCookie(user, res, "User registered successfully!!", 201)
     } catch (error) {
         console.log("Error::", error)
     }
 }
-export const userLogin = async (req,res) =>{
-    const {email,password}= req.body;
-    const user = await User.findOne({email});
-    if(!user) return res.status(400).json({
-        success:false,
-        message:"Invalid credentials!!"
+export const userLogin = async (req, res) => {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({
+        success: false,
+        message: "Invalid credentials!!"
     })
-    const isMatch = await bcrypt.compare(password,user.password);
-    if(!isMatch) return res.status(400).json({
-        success:false,
-        message:"Invalid credentials!!"
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({
+        success: false,
+        message: "Invalid credentials!!"
     })
-    sendCookie(user,res,"User logged in successfully!!",200)
+    sendCookie(user, res, "User logged in successfully!!", 200)
 }

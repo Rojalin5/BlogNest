@@ -9,3 +9,4 @@ const sendCookie = (user,res,message,statusCode=200)=>{
         message:message
     })
 }
+export {sendCookie}
