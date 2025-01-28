@@ -1,7 +1,9 @@
 import express from "express";
 import { config } from "dotenv";
 import { connectDB } from "./database/data.js";
-import userRouter from "./routes/user.route.js"
+import userRouter from "./routes/user.routes.js"
+import postRouter from "./routes/post.routes.js"
+import cookieParser from "cookie-parser";
 
 const server = express();
 config({
@@ -9,11 +11,14 @@ config({
 })
 //midlewares
 server.use(express.json());
-
+server.use(cookieParser())
 connectDB();
 
 //using route
-server.use("/api/v1/users",userRouter)
+server.use("/api/v1/users", userRouter)
+server.use("/api/v1/posts", postRouter)
+
+
 server.get("/", (req, res) => {
     res.send("welcome")
 })
