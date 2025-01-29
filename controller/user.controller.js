@@ -1,5 +1,5 @@
 import { User } from "../models/user.models.js";
-import { sendCookie } from "../utils/features.js";
+import { sendCookieUser } from "../utils/features.js";
 import bcrypt from "bcrypt";
 
 export const userRegister = async (req, res) => {
@@ -16,7 +16,7 @@ export const userRegister = async (req, res) => {
             password: password,
             role: role
         })
-        sendCookie(user, res, "User registered successfully!!", 201)
+        sendCookieUser(user, res, "User registered successfully!!", 201)
     } catch (error) {
         console.log("Error::", error)
     }
@@ -33,5 +33,5 @@ export const userLogin = async (req, res) => {
         success: false,
         message: "Invalid credentials!!"
     })
-    sendCookie(user, res, "User logged in successfully!!", 200)
+    sendCookieUser(user, res, "User logged in successfully!!", 200)
 }

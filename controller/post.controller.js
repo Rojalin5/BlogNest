@@ -1,6 +1,6 @@
 import { Post } from "../models/post.models.js"
 import { User } from "../models/user.models.js";
-import { sendCookie } from "../utils/features.js"
+import { sendCookiePost, sendCookieUser } from "../utils/features.js"
 
 export const newPost = async (req, res) => {
     try {
@@ -15,7 +15,7 @@ export const newPost = async (req, res) => {
             description: description,
             author: req.user._id
         })
-        sendCookie(post, res, "Post added successfully", 201)
+        sendCookieUser(user, res, "Post added successfully", 201)
 
     } catch (error) {
         console.log("Error::", error)
@@ -29,7 +29,7 @@ export const getPost = async (req, res) => {
             success: false,
             message: "No Post Found"
         })
-        sendCookie(posts, res, "Posts retrieved successfully", 200)
+        sendCookiePost(posts, res, "Posts retrieved successfully", 200,req.user)
     } catch (error) {
         console.log("Error::", error)
     }
@@ -50,7 +50,7 @@ export const editPost = async (req, res) => {
         if (description) post.description = description;
         await post.save();
 
-        sendCookie(post, res, "Post updated successfully", 200)
+        sendCookiePost(post, res, "Post updated successfully", 200,user)
     } catch (error) {
         console.log("Error::", error)
     }

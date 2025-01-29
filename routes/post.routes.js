@@ -5,7 +5,7 @@ import { editPost, getPost, newPost } from "../controller/post.controller.js";
 const router = express.Router()
 
 router.post("/newpost",isAuthenticated,newPost)
-router.get("/getmypost", getPost)
+router.get("/getmypost", isAuthenticated,getPost)
 router.put("/editpost", editPost)
 
 export default router;
