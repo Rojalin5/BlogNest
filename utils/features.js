@@ -10,15 +10,23 @@ const sendCookieUser = (user, res, message, statusCode) => {
         message: message,
     })
 }
-const sendCookiePost = (post, res, message, statusCode,user) => {
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET)
-    res.status(statusCode).cookie("token", token, {
+const sendCookiePost = (post, req, res, message, statusCode) => {
+    if (!req.user) {
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+    const token = jwt.sign({ _id: req.user._id }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
+    });
+    res
+      .status(statusCode)
+      .cookie("token", token, {
         httpOnly: true,
-        maxAge: 15 * 60 * 1000
-    }).json({
+        secure:true 
+      })
+      .json({
         success: true,
-        message: message,
-        post
-    })
-}
+        message,
+        post,
+      });
+  };
 export { sendCookieUser,sendCookiePost }
