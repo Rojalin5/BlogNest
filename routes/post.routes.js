@@ -5,9 +5,9 @@ import { deletePost, editPost, getPost, newPost } from "../controller/post.contr
 const router = express.Router()
 
 router.post("/newpost",isAuthenticated,newPost)
-router.get("/getmypost", isAuthenticated,getPost)
-router.put("/editpost",isAuthenticated, editPost)
-router.delete("/deletepost",isAuthenticated, deletePost)
+router.get("/getmypost/:id", isAuthenticated,getPost)
+router.put("/editpost/:id",isAuthenticated, editPost)
+router.delete("/deletepost/:id",isAuthenticated, deletePost)
 
 
 export default router;

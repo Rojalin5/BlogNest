@@ -25,23 +25,24 @@ export const newPost = async (req, res) => {
 
 export const getPost = async (req, res) => {
     try {
-        const userid = req.user._id;
+        const userid = req.params.id;
         const posts = await Post.find({ author: userid })
         if (!posts || posts.length === 0) return res.status(404).json({
             success: false,
             message: "No Post Found"
         })
-        sendCookiePost(posts, res, "Posts retrieved successfully", 200, req.user)
+        sendCookiePost(posts, req, res, "Posts retrieved successfully", 200, req.user)
     } catch (error) {
         console.log("Error::", error)
     }
 }
 
+
 export const editPost = async (req, res) => {
     try {
-        const postid = req.user._id;
-        const { postId, title, description } = req.body;
-        const post = await Post.findOne({ _id: postId, author: postid });
+        const postid = req.params.id;
+        const { title, description } = req.body;
+        const post = await Post.findOne({ _id: postid });
 
         if (!post) {
             return res.status(404).json({
@@ -50,7 +51,7 @@ export const editPost = async (req, res) => {
             });
         }
 
-        if (!post.author._id==(postid)) {
+        if (!post.author._id == (postid)) {
             return res.status(401).json({
                 success: false,
                 message: "You are not authorized to edit this post"
@@ -73,26 +74,28 @@ export const editPost = async (req, res) => {
 
 export const deletePost = async (req, res) => {
     try {
-        const postid = req.user._id;
-        const { postId } = req.body;
-        const post = await Post.findOne({_id:postId})
-if(!post){
-    return res.status(404).json({
-        success:false,
-        message:"No Post Found"
-    })
-}
-if (!postId._id==(postid)) {
-        return res.status(401).json({
+        const postid = req.params.id;
+        const post = await Post.findOne({ _id: postid })
+        if (!post) {
+            return res.status(404).json({
+                success: false,
+                message: "No Post Found"
+            })
+        }
+        console.log("post:",postid)
+        if (post._id.toString() !== (postid)) {
+            return res.status(401).json({
+                success: false,
+                message: "You are not authorized to edit this post"
+            })
+        }
+        console.log(post._id)
+
+        await post.deleteOne();
+        res.status(200).json({
             success: false,
-            message: "You are not authorized to edit this post"
+            message: "Post Deleted Successfully"
         })
-    }
-      await post.deleteOne();
-      res.status(200).json({
-        success:false,
-        message:"Post Deleted Successfully"
-      })
     }
     catch (error) {
         console.log("ERROR::", error)

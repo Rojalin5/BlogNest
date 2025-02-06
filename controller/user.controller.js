@@ -16,7 +16,7 @@ export const userRegister = async (req, res) => {
             password: password,
             role: role
         })
-        sendCookieUser(user, res, "User registered successfully!!", 201)
+        sendCookieUser(user,res, "User registered successfully!!", 201)
     } catch (error) {
         console.log("Error::", error)
     }
@@ -33,5 +33,43 @@ export const userLogin = async (req, res) => {
         success: false,
         message: "Invalid credentials!!"
     })
-    sendCookieUser(user, res, "User logged in successfully!!", 200)
+    sendCookieUser(user,res, "User logged in successfully!!", 200)
+}
+
+export const getMyDetail = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found."
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            message: "User found",
+            user
+        });
+    } catch (error) {
+        console.error("Error fetching user:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Server Error"
+        });
+    }
+};
+export const userLogOut = async(req,res) =>{
+    try {
+        res.clearCookie("token",{
+            httpOnly:true,
+            secure:true
+        });
+        res.status(200).json({
+            success:true,
+            message:"User logged Out Successfully"
+        })
+
+    } catch (error) {
+        console.log(error)
+    }
 }
