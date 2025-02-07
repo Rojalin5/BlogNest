@@ -22,8 +22,20 @@ export const newPost = async (req, res) => {
         console.log("Error::", error)
     }
 }
-
 export const getPost = async (req, res) => {
+ try {
+    const postid = req.params.id;
+    const post = await Post.findOne({_id:postid})
+    if(!post) return res.status(404).json({
+        success:false,
+        message:"Post not found"
+    })
+    sendCookiePost(post,req,res,"Post retrieved successfully",200)
+  } catch (error) {
+    console.log("Error:",error)
+ }
+}
+export const getAllPost = async (req, res) => {
     try {
         const userid = req.params.id;
         const posts = await Post.find({ author: userid })
@@ -31,7 +43,7 @@ export const getPost = async (req, res) => {
             success: false,
             message: "No Post Found"
         })
-        sendCookiePost(posts, req, res, "Posts retrieved successfully", 200, req.user)
+        sendCookiePost(posts, req, res, "All Posts retrieved successfully", 200, req.user)
     } catch (error) {
         console.log("Error::", error)
     }
@@ -82,7 +94,7 @@ export const deletePost = async (req, res) => {
                 message: "No Post Found"
             })
         }
-        console.log("post:",postid)
+        console.log("post:", postid)
         if (post._id.toString() !== (postid)) {
             return res.status(401).json({
                 success: false,
