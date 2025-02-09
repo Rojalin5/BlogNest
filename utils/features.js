@@ -10,6 +10,7 @@ const sendCookieUser = (user,res, message, statusCode) => {
         message: message
     })
 }
+
 const sendCookiePost = (post, req, res, message, statusCode) => {
     if (!req.user) {
       return res.status(401).json({ success: false, message: "Unauthorized" });
@@ -29,4 +30,23 @@ const sendCookiePost = (post, req, res, message, statusCode) => {
         post,
       });
   };
-export { sendCookieUser,sendCookiePost }
+
+  // check if we can add cases where do not need to show the admin will not show
+  const sendCookieAdmin = (admin, res, message, statusCode) => {
+    const token = jwt.sign({ _id: admin._id }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
+    });
+    res
+      .status(statusCode)
+      .cookie("token", token, {
+        httpOnly: true,
+        secure:true 
+      })
+      .json({
+        success: true,
+        message,
+        admin,
+      });
+  };
+
+export { sendCookieUser,sendCookiePost ,sendCookieAdmin}

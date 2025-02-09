@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import hashedPassword from "../middlewares/hashedPassword.js";
 
-const userSchema = new mongoose.Schema({
+const adminSchema = new mongoose.Schema({
     name:{
         type:String,
         required:true 
@@ -18,11 +18,11 @@ const userSchema = new mongoose.Schema({
     },
     role:{
         type:String,
-        enum:["User"],
-        default:"User"
+        enum:["Admin"],
+        default:"Admin"
     }
 },{timestamps:true});
 
-userSchema.pre("save",hashedPassword);
+adminSchema.pre("save",hashedPassword);
 
-export const User = mongoose.model("User",userSchema);
+export const Admin = mongoose.model("Admin",adminSchema)
