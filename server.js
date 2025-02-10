@@ -4,6 +4,7 @@ import { connectDB } from "./database/data.js";
 import userRouter from "./routes/user.routes.js"
 import postRouter from "./routes/post.routes.js"
 import adminRouter from "./routes/admin.routes.js"
+import adminManage from "./routes/adminManagement.routes.js"
 import cookieParser from "cookie-parser";
 
 const server = express();
@@ -12,13 +13,15 @@ config({
 })
 //midlewares
 server.use(express.json());
-server.use(cookieParser())
+server.use(cookieParser());
 connectDB();
 
 //using route
 server.use("/api/v1/users", userRouter)
 server.use("/api/v1/posts", postRouter)
 server.use("/api/v1/admin", adminRouter)
+server.use("/api/v1/admin/manage", adminManage)
+
 
 server.get("/", (req, res) => {
     res.send("welcome")

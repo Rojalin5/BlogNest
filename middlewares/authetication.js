@@ -34,7 +34,7 @@ export const isAuthenticatedAdmin= async (req, res, next) => {
         const admin = await Admin.findById(decoded._id);
         if(!admin) return res.status(404).json({
             success:false,
-            message:"Admin not found"
+            message:"Admin not found."
         })
         req.admin = admin;
         next()
