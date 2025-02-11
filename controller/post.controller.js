@@ -5,7 +5,7 @@ import { sendCookiePost, sendCookieUser } from "../utils/features.js"
 
 export const newPost = async (req, res) => {
     try {
-        const { title, description } = req.body;
+        const { title, description,category,tags } = req.body;
         const user = await User.findById(req.user._id)
         if (!user) return res.status(401).json({
             success: false,
@@ -14,7 +14,9 @@ export const newPost = async (req, res) => {
         const post = await Post.create({
             title: title,
             description: description,
-            author: req.user._id
+            author: req.user._id,
+            category:category,
+            tags:tags
         })
         sendCookieUser(user, res, "Post added successfully", 201)
 
@@ -53,7 +55,7 @@ export const getAllPost = async (req, res) => {
 export const editPost = async (req, res) => {
     try {
         const postid = req.params.id;
-        const { title, description } = req.body;
+        const { title, description,category,tags } = req.body;
         const post = await Post.findOne({ _id: postid });
 
         if (!post) {
@@ -72,6 +74,8 @@ export const editPost = async (req, res) => {
 
         if (title) post.title = title;
         if (description) post.description = description;
+        if (category) post.category = category;
+        if (tags) post.tags = tags
         await post.save();
 
         sendCookiePost(post, req, res, "Post updated successfully", 200);

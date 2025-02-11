@@ -14,6 +14,13 @@ const postSchema = new mongoose.Schema({
         ref:"User",
         required:true
     },
+    category:{
+        type:String,
+        required:true
+    },
+    tags:[
+        {type:String}
+    ],
     createdAt:{
         type:Date,
         default:Date.now()

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import hashedPassword from "../middlewares/hashedPassword.js";
+import { compare } from "bcrypt";
 
 const userSchema = new mongoose.Schema({
     name:{
