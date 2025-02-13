@@ -40,12 +40,23 @@ export const getPost = async (req, res) => {
 export const getAllPost = async (req, res) => {
     try {
         const userid = req.params.id;
-        const posts = await Post.find({ author: userid })
-        if (!posts || posts.length === 0) return res.status(404).json({
-            success: false,
-            message: "No Post Found"
+       
+        const {category,tags} = req.query;
+        const filter = {author:userid}
+
+        if(category){
+            filter.category = category
+        }
+        if(tags){
+            const tagArray = tags.split(",")
+            filter.tags = {$in:tagArray}
+        }
+        const post = await Post.find(filter)
+        if(!post || post.length === 0) return res.status(404).json({
+            success:false,
+            message:"No post Found"
         })
-        sendCookiePost(posts, req, res, "All Posts retrieved successfully", 200, req.user)
+        sendCookiePost(post,req,res,"All Posts retrieved successfully")
     } catch (error) {
         console.log("Error::", error)
     }
